@@ -1,0 +1,12 @@
+export const getUser=async(req,res)=>{
+    try{
+        const user= await user.findById(req.params.id)
+        const {password, ...info}= user._doc
+        res.status(200).json(info)
+
+    }
+    catch(error){
+        res.status(500).json("You are not authenticated")
+        console.log(error)
+    }
+}
