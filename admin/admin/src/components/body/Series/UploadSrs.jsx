@@ -1,11 +1,14 @@
 import React,{useEffect, useState} from 'react';
-import {Box,makeStyles,Typography,TextField,TextareaAutosize} from '@material-ui/core'
+import {Box,makeStyles,Typography,TextField,TextareaAutosize,Button} from '@material-ui/core'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import RichEditor from './TextEditor';
+import {createPost,uploadFile} from '../../Service/api.js'
+
+
 
 
 const useStyle=makeStyles((theme)=>({
@@ -36,6 +39,39 @@ const useStyle=makeStyles((theme)=>({
   
 
 const UploadSrs = () => {
+ 
+  
+  const initial={
+    title:'',
+    text:'',
+     picture:''
+
+  }
+  const [post,setPost]=useState(initial)
+  const [file,setFile]=useState('')
+  const [imageUrl,setImageUrl]=useState('')
+
+  const handlePost=(e)=>{
+     setPost({...post,[e.target.name]:e.target.value})
+  }
+  console.log(post)
+  
+const handleClick=async(e)=>{
+await createPost(post)
+}
+useEffect(()=>{
+  console.log(file)
+  const getImage=async()=>{
+    if(file){
+      const data=new FormData()
+      data.append("name",file.name)
+      data.append("file",file)
+     await uploadFile(data)
+    }
+  }
+  getImage()
+
+},[file])
 
 
     const classes=useStyle()
@@ -50,30 +86,20 @@ const UploadSrs = () => {
             <Box className={classes.container}>
 
             <FormControl  variant={'outlined'}className={classes.formControl}noValidate autoComplete="off">
-            <Select
-      labelId="demo-simple-select-outlined-label"
-      id="demo-simple-select-outlined"
-      value={age}
-      onChange={handleChange}
-      label="Age"
-        >
-
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-            <TextField id="standard-basic" label="Your Series Title" />
-  <input type="file"/>
+      
+            <TextField id="standard-basic" name='title' onChange={(e)=>handlePost(e)} label="Your Series Title" />
+  <input type="file" onChange={(e)=>setFile(e.target.files[0])}/>
   <TextField id="standard-basic" label="Your Image Title" />
-  <InputLabel id="demo-simple-select-filled-label">Genre</InputLabel>
-<RichEditor/>
+ 
+  <RichEditor name="text" onChange={(e)=>handlePost(e)}/>
 
 
-
+<Button onClick={(e)=>handleClick(e)}>Post</Button>
 
 
 
 </FormControl>
+
 
             
 

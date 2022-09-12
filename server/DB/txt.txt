@@ -1,0 +1,35 @@
+let gfs;
+const conn=mongoose.connection
+
+conn.once('open',()=>{
+    gfs=grid(conn.db,mongoose.mongo);
+    gfs.collection('fs')
+})
+
+export const createImage=(request,response)=>{
+    try{
+        if(!request.file){
+            return response.status(404).json("File Not Found")
+        }
+         const imageUrl=`${url}/file/${request.file.filename}`;
+         response.status(200).json(imageUrl)
+
+    }
+    catch(error){
+        console.log(error)
+    }
+ 
+}
+
+export const getImage=async(request,response)=>{
+    try{
+        const file=await gfs.files.findOne({filename:request.params.filename})
+        const readStream=gfs.createReadStream(file.filename)
+        readStream.pipe(response)
+
+    }
+    catch(error){
+        console.log(error)
+    }
+
+}
