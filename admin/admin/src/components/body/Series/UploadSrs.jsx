@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState,useContext} from 'react';
 import {Box,makeStyles,Typography,TextField,TextareaAutosize,Button} from '@material-ui/core'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,6 +7,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import RichEditor from './TextEditor';
 import {createPost,uploadFile} from '../../Service/api.js'
+import { BlogContext } from '../../../context/UserContext';
+
 
 
 
@@ -39,26 +41,34 @@ const useStyle=makeStyles((theme)=>({
   
 
 const UploadSrs = () => {
- 
+  const {blog,setBlog}=useContext(BlogContext)
+
+
+
   
   const initial={
     title:'',
+    
+    picture:'',
     text:'',
-     picture:''
 
   }
   const [post,setPost]=useState(initial)
+
   const [file,setFile]=useState('')
   const [imageUrl,setImageUrl]=useState('')
 
   const handlePost=(e)=>{
      setPost({...post,[e.target.name]:e.target.value})
   }
-  console.log(post)
+
+  const handleClick=async(e)=>{
+    await createPost(post)
+    }
   
-const handleClick=async(e)=>{
-await createPost(post)
-}
+ 
+  
+
 useEffect(()=>{
   console.log(file)
   const getImage=async()=>{
@@ -66,7 +76,15 @@ useEffect(()=>{
       const data=new FormData()
       data.append("name",file.name)
       data.append("file",file)
-     await uploadFile(data)
+   
+    const image= await uploadFile(data)
+    console.log(image)
+    post.picture=image.data
+    setImageUrl(image.data)
+    setBlog(post)
+
+
+
     }
   }
   getImage()
@@ -91,7 +109,7 @@ useEffect(()=>{
   <input type="file" onChange={(e)=>setFile(e.target.files[0])}/>
   <TextField id="standard-basic" label="Your Image Title" />
  
-  <RichEditor name="text" onChange={(e)=>handlePost(e)}/>
+  <TextareaAutosize minLength={'10'} name="text" onChange={(e)=>handlePost(e)} />
 
 
 <Button onClick={(e)=>handleClick(e)}>Post</Button>

@@ -26,3 +26,13 @@ export const uploadFile=async(data)=>{
     }
 
 }
+export const getBlogdata=async()=>{
+    try{
+        const response=await axios.get(`${url}/get/data`)
+        return response
+
+    }
+    catch(error){
+
+    }
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,6 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { getBlogdata } from '../../Service/api';
+;
 
 const useStyles = makeStyles({
     table: {
@@ -26,6 +28,19 @@ const useStyles = makeStyles({
   
 
 const SeriesList = () => {
+
+  useEffect(()=>{
+    const getdata=async()=>{
+      const data=await getBlogdata()
+      console.log(data)
+   
+    
+   
+
+    }
+    getdata()
+
+  },[])
     const classes=useStyles()
     return (
         <TableContainer component={Paper}>
