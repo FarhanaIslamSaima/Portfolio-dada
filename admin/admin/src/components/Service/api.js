@@ -36,3 +36,14 @@ export const getBlogdata=async()=>{
 
     }
 }
+export const getpostByid=async(id)=>{
+    try{
+        const response=await axios.get(`${url}/get/id`,id)
+        return response.data
+
+    }
+    catch(error){
+        return error
+    }
+
+}

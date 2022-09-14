@@ -25,3 +25,15 @@ export const getPost=async(request,response)=>{
         
     }
 }
+export const getPostbyId=async(request,response)=>{
+    try{
+        const data=await blogModel.findById(request.params.id)
+        response.status(200).json(data)
+
+
+    }
+    catch(error){
+        response.status(500).json(error)
+
+    }
+}
