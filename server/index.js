@@ -13,6 +13,6 @@ app.use('/',Router)
 
 
 app.listen(8000,()=>{
-    console.log("Server connected succcessfully")
+    console.log("Server connected succcessfull")
 })
 Connection()
